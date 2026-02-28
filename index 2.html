@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khoindvn Fallback Installation Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --border: #1e2230;
+      --accent: #00e5ff;
+      --accent2: #ff3c6e;
+      --text: #e8eaf0;
+      --muted: #6b7185;
+      --card: #13161e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-orb {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+      top: -200px;
+      left: -200px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+    .glow-orb2 {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,60,110,0.05) 0%, transparent 70%);
+      bottom: -100px;
+      right: -100px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 16s ease-in-out infinite reverse;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(60px, 40px); }
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 52px;
+      animation: fadeDown 0.7s ease both;
+    }
+    .badge {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.3);
+      padding: 5px 14px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+      background: rgba(0,229,255,0.05);
+    }
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* Warning box */
+    .warning {
+      background: rgba(255,60,110,0.07);
+      border: 1px solid rgba(255,60,110,0.25);
+      border-left: 3px solid var(--accent2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 0.85rem;
+      color: #ffaabf;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      animation: fadeDown 0.7s 0.1s ease both;
+    }
+    .warning strong { color: var(--accent2); }
+
+    /* Requirements */
+    .requirements {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      animation: fadeDown 0.7s 0.2s ease both;
+    }
+    .req-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-family: 'Space Mono', monospace;
+    }
+    .req-item.good { border-color: rgba(0,229,255,0.2); color: #a8f0ff; }
+    .req-item.bad { border-color: rgba(255,60,110,0.2); color: #ffaabf; }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+      animation: fadeDown 0.7s 0.3s ease both;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,229,255,0.3), transparent);
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* DNS Card */
+    .dns-card {
+      background: var(--card);
+      border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .dns-info h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .dns-info p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover {
+      background: #33eeff;
+      box-shadow: 0 0 20px rgba(0,229,255,0.4);
+      transform: translateY(-1px);
+    }
+    .btn-install {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.3);
+      padding: 8px 16px;
+      font-size: 0.75rem;
+    }
+    .btn-install:hover {
+      background: rgba(0,229,255,0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0,229,255,0.2);
+    }
+
+    /* Ksigns grid */
+    .ksigns-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeDown 0.7s 0.4s ease both;
+    }
+    .ksign-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .ksign-card:hover {
+      border-color: rgba(0,229,255,0.2);
+      background: #161921;
+    }
+    .ksign-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      flex: 1;
+    }
+    .ksign-index {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      width: 28px;
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      animation: fadeDown 0.7s 0.5s ease both;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .dns-card { flex-direction: column; align-items: flex-start; }
+      .requirements { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb"></div>
+  <div class="glow-orb2"></div>
+
+  <div class="container">
+    <header>
+      <div class="badge">Fallback Install Page</div>
+      <h1>Khoindvn Installation Page</h1>
+      <p class="subtitle">If <strong>khoindvn.io.vn</strong>, <strong>api.khoindvn.io.vn</strong>, or <strong>download.khoindvn.io.vn</strong> does not load, use this page instead.</p>
+    </header>
+
+    <div class="warning">
+      <strong>⚠ DO NOT SHARE THIS SITE</strong> to the Delta Community unless they have already tried to use Khoindvn with <strong>mobile data and hotspot</strong>.<br/>
+      These are the same KSigns as the ones on Khoindvn!
+    </div>
+
+    <div class="requirements">
+      <div class="req-item bad">❌ Do NOT use a VPN</div>
+      <div class="req-item good">✅ Use Safari</div>
+      <div class="req-item good">✅ Install the Anti-Revoke DNS first</div>
+    </div>
+
+    <!-- DNS Section -->
+    <div class="section">
+      <div class="section-label">Step 1 — Anti-Revoke DNS</div>
+      <div class="dns-card">
+        <div class="dns-info">
+          <h3>Khoindvn Anti-Revoke DNS</h3>
+          <p>khoindvn.io.vn.mobileconfig</p>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/dns-khoindvn/top-country-stats/releases/download/DNS/khoindvn.io.vn.mobileconfig">
+          ↓ Download DNS Profile
+        </a>
+      </div>
+    </div>
+
+    <!-- Ksigns Section -->
+    <div class="section">
+      <div class="section-label">Step 2 — Install KSign</div>
+      <div class="section-title">Available itms-services Links</div>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">Copy one link at a time and paste it into Safari. If you get an integrity error, try another.</p>
+
+      <div class="ksigns-list">
+
+        <div class="ksign-card">
+          <span class="ksign-index">01</span>
+          <span class="ksign-name">VIETNAM AIRLINES JSC</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/qhjns.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">02</span>
+          <span class="ksign-name">PowerChina International Group Limited</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/uwswm.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">03</span>
+          <span class="ksign-name">PowerChina International Group Limited 1</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/tsnhl.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">04</span>
+          <span class="ksign-name">PowerChina International Group Limited 2</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/rwcle.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">05</span>
+          <span class="ksign-name">PowerChina International Group Limited 3</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/esqbp.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">06</span>
+          <span class="ksign-name">Qingdao Rural Commercial Bank Co., Ltd</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/48bhl.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">07</span>
+          <span class="ksign-name">Commission on Elections</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/3z8yi.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">08</span>
+          <span class="ksign-name">Commission on Elections V1</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/9nd31.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">09</span>
+          <span class="ksign-name">Commission on Elections V2</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/c7g2e.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">10</span>
+          <span class="ksign-name">Wasu Media & Network Co Ltd</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/xi6ou.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">11</span>
+          <span class="ksign-name">Luoyang Postal Administration</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/t0bu0.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">12</span>
+          <span class="ksign-name">Etisalat – Emirates Telecommunications Corporation</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/2i4vn.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">13</span>
+          <span class="ksign-name">China National Heavy Duty Truck Group Co Ltd</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/3xrpd.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">14</span>
+          <span class="ksign-name">Guangzhou Huahan Educational & Technology Co Ltd</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/n2mlh.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">15</span>
+          <span class="ksign-name">China Telecommunications Corp</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/oprhq.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">16</span>
+          <span class="ksign-name">Global Takeoff INC</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/ag7gf.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">17</span>
+          <span class="ksign-name">Global Takeoff INC V1</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/fn1ju.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">18</span>
+          <span class="ksign-name">Global Takeoff INC V2</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/3tpz3.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">19</span>
+          <span class="ksign-name">Global Takeoff INC V3</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/cauar.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">20</span>
+          <span class="ksign-name">Global Takeoff INC V4</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/jh3e5.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">21</span>
+          <span class="ksign-name">Global Takeoff INC V5</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/ds1wy.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">22</span>
+          <span class="ksign-name">Global Takeoff INC V6</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/p56m4.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">23</span>
+          <span class="ksign-name">Global Takeoff INC V7</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/yblf3.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">24</span>
+          <span class="ksign-name">Tianjin University of Commerce</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/djq6t.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">25</span>
+          <span class="ksign-name">VIETNAM JOINT STOCK COMMERCIAL BANK FOR INDUSTRY AND TRADE</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/mmwkx.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">26</span>
+          <span class="ksign-name">VietinBank V1</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/xu7g5.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">27</span>
+          <span class="ksign-name">VietinBank V2</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/yd37e.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">28</span>
+          <span class="ksign-name">VietinBank V3</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/l9bnk.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">29</span>
+          <span class="ksign-name">VietinBank V4</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/rleaz.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">30</span>
+          <span class="ksign-name">VIETTEL GROUP</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/n0mk6.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">31</span>
+          <span class="ksign-name">CHIBA INSTITUTE OF TECHNOLOGY</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/xpvr4.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">32</span>
+          <span class="ksign-name">CHIBA INSTITUTE OF TECHNOLOGY V1</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/wb7hb.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">33</span>
+          <span class="ksign-name">CHIBA INSTITUTE OF TECHNOLOGY V2</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/ksbj7.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">34</span>
+          <span class="ksign-name">CHIBA INSTITUTE OF TECHNOLOGY V3</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/ojpmk.plist">Install</a>
+        </div>
+
+        <div class="ksign-card">
+          <span class="ksign-index">35</span>
+          <span class="ksign-name">CHIBA INSTITUTE OF TECHNOLOGY V4</span>
+          <a class="btn btn-install" href="itms-services://?action=download-manifest&url=https://wezlemin.github.io/ksigns/6rqtl.plist">Install</a>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      Created by <a href="#">@itswhitespray</a> &nbsp;•&nbsp; Delta Community Server
+    </footer>
+  </div>
+</body>
+</html>
